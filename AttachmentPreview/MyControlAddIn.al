@@ -12,6 +12,5 @@ controladdin MyControlAddIn
     HorizontalShrink = true;
     Scripts = './javaScript.js';
     StartupScript = './AttachmentPreview/preview.html';
-    StyleSheets = './AttachmentPreview/preview.css';
     procedure GetAttachment(Base64Text: Text)
 }

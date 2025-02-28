@@ -22,15 +22,10 @@ page 50501 "Preview Attachment"
     }
     trigger OnOpenPage()
     begin
-        returnAttachmentBase64(rec."EntryNo");
-        CurrPage.MyChartControl.GetAttachment(LargeText);
+        CurrPage.MyChartControl.GetAttachment(returnAttachmentBase64());
     end;
 
-    var
-        Base64Text: text;
-        LargeText: text;
-
-    procedure returnAttachmentBase64(entryNo: Integer): Text
+    procedure returnAttachmentBase64(): Text
     var
         FilePath: Text;
         FileName: text;
@@ -47,8 +42,6 @@ page 50501 "Preview Attachment"
         // Open the file and read it into an InStream
         File.OPEN(FilePath);
         File.CREATEINSTREAM(InStream);
-        FileName := FileMgt.GetFileName(FilePath);
-        Extension := FileMgt.GetExtension(FileName);
-        LargeText := Base64.ToBase64(instream, false);
+        exit(Base64.ToBase64(instream, false));
     end;
 }

@@ -91,40 +91,24 @@ page 50500 Attachment
         ServerFilePath: Text;
         TargetDirectory: Text;
         File: file;
-        ServerFolderPath: text;
         FileMgt: Codeunit "File Management";
 
     begin
         // Prompt the user to select a file and upload into TempBlob
         if UploadIntoStream('Select a file to upload', '', '', FileName, InStream) then begin
-            // Validate File Extension
             Extension := FileMgt.GetExtension(FileName);
             if Extension = '' then
                 Error('Invalid file. Please upload a file with a valid extension.');
-
-            // Define the server directory (ensure it is configured in your setup)
-
-            TargetDirectory := rec."Attachment Storage Location";
-            ServerFolderPath := TargetDirectory;
-            if TargetDirectory = '' then
-                Error('Attachment Storage Location is not configured.');
-
-            if not TargetDirectory.EndsWith('\') then
-                TargetDirectory := TargetDirectory + '\';
-
+            TargetDirectory := rec."Attachment Storage Location";// Get the attachment storage location
             // Construct server file path with unique name
             ServerFilePath := TargetDirectory + Format(rec.EntryNo) + '.' + Extension;
-
             File.CREATE(ServerFilePath);       // Create the file on the server
             File.CREATEOUTSTREAM(OutStream);  // Prepare to write to the file
-
             CopyStream(OutStream, InStream);  // Write the data
             File.CLOSE;                       // Close the file
-
             Rec.Extension := Extension;
             Rec.FileName := ServerFilePath;
             rec.MODIFY;
-
             Message('File uploaded successfully to server location: %1', ServerFilePath);
         end else
             Error('File upload canceled.');
@@ -142,19 +126,13 @@ page 50500 Attachment
         FilePath := Rec."FileName"; // Ensure this stores the server file path
         if FilePath = '' then
             Error('File path not specified for this document.');
-
         // Open the file and read it into an InStream
         File.OPEN(FilePath);
         File.CREATEINSTREAM(InStream);
-
         FileName := FileMgt.GetFileName(FilePath);
-
         // Prompt the user to save the file on their client computer
         DownloadFromStream(InStream, '', '', '', FileName);
-
-        // Close the file
         File.CLOSE;
-
         Message('File downloaded successfully: %1', FileName);
     end;
 
