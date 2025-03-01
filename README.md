@@ -63,4 +63,4 @@ An HTML structure for rendering the attachment preview.
 
 4️⃣ Start previewing attachments without downloading!
 
-📬 Connect with me on [LinkedIn](www.linkedin.com/in/santoshbaral1)
+📬 Connect with me on [LinkedIn](https://www.linkedin.com/in/santoshbaral1)
